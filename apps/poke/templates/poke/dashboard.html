@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Dashboard</title>
+</head>
+<body>
+    <h1>Welcome to Dashboard, {{request.session.user.name}}!</h1>
+    <a href="/log_out"><p>Log out</p></a>
+    <div>
+        <p>{{pokes|length}} People Poked You!</p>
+        {% for alias, count in pokes %}
+            <h3>{{alias}} poked you {{count}} times.</h3>
+        {% endfor %}
+        <p>People you may want to poke:</p>
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Alias</th>
+                <th>Email Address</th>
+                <th>Poke History</th>
+                <th>Action</th>
+            </tr>
+            {% for user, count in users %}
+                    <tr>
+                        <td>{{ user.name }}</td>
+                        <td>{{ user.alias }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>{{count}} Pokes</td>
+                        <td>
+                            <form action="/poke" method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="uid" value="{{user.id}}">
+                                <input type="submit" value="Poke">
+                            </form>
+                        </td>
+                    </tr>
+            {% endfor %}
+        </table>
+    </div>
+</body>
+</html>
